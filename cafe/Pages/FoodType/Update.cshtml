@@ -1,5 +1,5 @@
-﻿@page
-@model cafe.Pages.FoodType.CreateModel
+﻿@page "{id}"
+@model cafe.Pages.FoodType.UpdateModel
 @{
 }
 
@@ -7,15 +7,17 @@
     <div class="col-12 col-lg-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">Add food type</h5>
+                <h5 class="card-title mb-0">Update food type</h5>
             </div>
             <div class="card-body">
                 <form method="post">
                     <div class="mb-3">
                         <label class="form-label">Food type</label>
-                        <input type="text" name="foodTypeName" class="form-control" placeholder="Food type name">
+                        <input type="text" asp-for="FoodType.Name" class="form-control" placeholder="Food type name">
                     </div>
-                   
+                    
+                    <input type="hidden" asp-for="FoodType.FoodTypeId"/>
+
                     <button type="submit" value="Save" class="btn btn-primary">Save</button>
                 </form>
             </div>
@@ -24,6 +26,5 @@
     </div>
 
     <div class="col-12 col-lg-6">
-	
     </div>
 </div>

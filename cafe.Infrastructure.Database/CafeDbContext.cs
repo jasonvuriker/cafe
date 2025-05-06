@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace cafe.Infrastructure.DataAccess;
 
-public class CafeDbContext(DbContextOptions options) : DbContext(options)
+public class CafeDbContext(DbContextOptions<CafeDbContext> options) : DbContext(options)
 {
     public DbSet<FoodType> FoodTypes { get; set; }
 

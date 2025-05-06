@@ -1,23 +1,29 @@
-﻿using cafe.Infrastructure.DataAccess.Repositories.Interfaces;
+﻿using cafe.Application.Exceptions;
+using cafe.Infrastructure.DataAccess.Repositories.Interfaces;
 using MediatR;
 
 namespace cafe.Application.FoodType.GetFoodType;
 
-public class GetFoodTypeQuery : IRequest<IList<FoodTypeDto>>;
-
-public class GetFoodTypeQueryHandler(IFoodTypeRepository foodTypeRepository) : IRequestHandler<GetFoodTypeQuery, IList<FoodTypeDto>>
+public class GetFoodTypeQuery(int id) : IRequest<FoodTypeDto>
 {
-    public async Task<IList<FoodTypeDto>> Handle(GetFoodTypeQuery request, CancellationToken cancellationToken)
-    {
-        var result = foodTypeRepository.GetAll()
-            .Select(r => new FoodTypeDto()
-            {
-                Name = r.Name,
-                FoodTypeId = r.FoodTypeId,
-            })
-            .ToList();
-
-        return result;
-    }
+    public int Id { get; } = id;
 }
 
+public class GetFoodTypeQueryHandler(IFoodTypeRepository foodTypeRepository) : IRequestHandler<GetFoodTypeQuery, FoodTypeDto>
+{
+    public async Task<FoodTypeDto> Handle(GetFoodTypeQuery request, CancellationToken cancellationToken)
+    {
+        var result = await foodTypeRepository.GetByIdAsync(request.Id);
+
+        if (result is null)
+        {
+            throw new FoodTypeNotFoundException(request.Id);
+        }
+
+        return new FoodTypeDto()
+        {
+            FoodTypeId = result.FoodTypeId,
+            Name = result.Name,
+        };
+    }
+}

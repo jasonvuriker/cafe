@@ -11,7 +11,7 @@ namespace cafe.Pages.FoodType
 
         public async Task OnGet()
         {
-            FoodTypes = await mediator.Send(new GetFoodTypeQuery());
+            FoodTypes = await mediator.Send(new GetFoodTypesQuery());
         }
     }
 }
