@@ -1,0 +1,40 @@
+﻿@page
+@model cafe.Pages.FoodType.IndexModel
+@{
+}
+<h1 class="h3 mb-3">Food Types</h1>
+
+<div class="row">
+    <div class="col-12 col-xl-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Basic Table</h5>
+                <h6 class="card-subtitle text-muted">
+                    Using the most basic table markup, here’s how .table-based tables look in Bootstrap.
+                </h6>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th style="width:40%;">Name</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+				    @foreach (var food in Model.FoodTypes)
+                    {
+                        <tr>
+                            <td>
+                                @food.FoodTypeId
+                            </td>
+                            <td>
+                                @food.Name
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

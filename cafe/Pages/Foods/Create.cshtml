@@ -1,0 +1,46 @@
+﻿@page
+@model cafe.Pages.Foods.CreateModel
+@{
+}
+
+<div class="row">
+	<div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Add food</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Food name</label>
+                        <input type="text" name="FoodDto.Name" class="form-control" placeholder="Food name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Food type</label>
+                        <input type="number" name="FoodDto.FoodTypeId" class="form-control" placeholder="Food type">
+                    </div>
+                   @*  <div class="mb-3">
+                        <label class="form-label">Textarea</label>
+                        <textarea class="form-control" placeholder="Textarea" rows="1"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">File input</label>
+                        <input class="form-control" type="file">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-check m-0">
+                            <input type="checkbox" class="form-check-input">
+                            <span class="form-check-label">Check me out</span>
+                        </label>
+                    </div> *@
+                    <button type="submit" value="Save" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+
+	</div>
+
+	<div class="col-12 col-lg-6">
+	
+	</div>
+</div>
