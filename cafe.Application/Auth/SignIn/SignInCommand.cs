@@ -1,4 +1,6 @@
 ﻿using cafe.Application.Services;
+using cafe.Domain.Helper;
+using cafe.Infrastructure.DataAccess.Repositories.Interfaces;
 using MediatR;
 
 namespace cafe.Application.Auth.SignIn;
@@ -8,11 +10,29 @@ public class SignInCommand(SignInRequestDto request) : IRequest<SignInResponseDt
     public SignInRequestDto Request { get; } = request;
 }
 
-public class SignInCommandHandler(IAuthService authService) : IRequestHandler<SignInCommand, SignInResponseDto>
+public class SignInCommandHandler(
+    IUserRepository userRepository, 
+    IAuthService authService,
+    IPasswordHasher passwordHasher) 
+    : IRequestHandler<SignInCommand, SignInResponseDto>
 {
-    public async Task<SignInResponseDto> Handle(SignInCommand request, CancellationToken cancellationToken)
+    public async Task<SignInResponseDto> Handle(SignInCommand command, CancellationToken cancellationToken)
     {
-        var token = authService.GetToken(request.Request.Username);
+        var request = command.Request;
+
+        var user = await userRepository.GetByUsernameAsync(request.Username);
+        if (user is null)
+        {
+            throw new UnauthorizedAccessException("Invalid username or password.");
+        }
+
+        var isValidPassword = passwordHasher.VerifyHash(request.Password, user.PasswordHash);
+        if (!isValidPassword)
+        {
+            throw new UnauthorizedAccessException("Invalid username or password.");
+        }
+
+        var token = authService.GetToken(request.Username);
 
         return new SignInResponseDto()
         {

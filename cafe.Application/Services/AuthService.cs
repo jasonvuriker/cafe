@@ -20,9 +20,12 @@ public class AuthService(IOptions<JwtSettings> settings) : IAuthService
         var token = new JwtSecurityToken(
             "cafe.uz",
             "cafe.uz",
-            claims: [],
+            claims: [
+                new Claim(JwtRegisteredClaimNames.Email, ""),
+                new Claim("user_id", "1")
+            ],
             expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
-            signingCredentials:credentials
+            signingCredentials: credentials
         );
 
         return _handler.WriteToken(token);

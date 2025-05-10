@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cafe.Infrastructure.DataAccess.Repositories;
 
@@ -10,9 +11,11 @@ using cafe.Infrastructure.DataAccess.Repositories;
 namespace cafe.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(CafeDbContext))]
-    partial class CafeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250510121604_AddedUserInfo1")]
+    partial class AddedUserInfo1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,6 +168,17 @@ namespace cafe.Infrastructure.DataAccess.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            Email = "super_admin@yandex.ru",
+                            IsActive = true,
+                            PasswordHash = "6B8BB5EAE345018F01DC8F5E516EA5E0A79E2F901A0AE6B780A822F413B2D22B-C13C751C14D8A31B1978EA7E4B139146",
+                            RoleId = 1,
+                            Username = "super_admin"
+                        });
                 });
 
             modelBuilder.Entity("PermissionRole", b =>

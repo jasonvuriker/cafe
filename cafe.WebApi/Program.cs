@@ -1,46 +1,18 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using cafe.Application;
-using cafe.Application.Options;
 using cafe.Infrastructure.DataAccess;
+using cafe.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services
+    .AddEndpointsApiExplorer()
+    .AddSwaggerDocs()
+    .AddJwtAuthentication(builder.Configuration)
     .AddDatabase(builder.Configuration)
-    .AddApplication();
-
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        //options.Authority = "cafe.uz";
-        options.Audience = "cafe.uz";
-
-        string signInKey = builder.Configuration["Jwt:Key"];
-
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateAudience = true,
-            ValidateIssuer = true,
-            ValidateIssuerSigningKey = true,
-            ValidAudiences = ["cafe.uz", "mobile.cafe.uz"],
-            ValidIssuers = ["cafe.uz"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signInKey))
-        };
-    });
-
-builder.Services.AddOptions<JwtSettings>()
-    .BindConfiguration("Jwt");
-
+    .AddApplication()
+    .AddConfigurations(builder.Configuration);
 
 var app = builder.Build();
 

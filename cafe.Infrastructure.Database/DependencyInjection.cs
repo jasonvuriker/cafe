@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using cafe.Infrastructure.DataAccess.Repositories;
 using cafe.Infrastructure.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
