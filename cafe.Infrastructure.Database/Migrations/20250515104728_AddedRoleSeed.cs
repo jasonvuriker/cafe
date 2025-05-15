@@ -7,11 +7,41 @@
 namespace cafe.Infrastructure.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedUserInfo : Migration
+    public partial class AddedRoleSeed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Foods",
+                columns: table => new
+                {
+                    FoodId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FoodTypeId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Ingredients = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Foods", x => x.FoodId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FoodTypes",
+                columns: table => new
+                {
+                    FoodTypeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FoodTypes", x => x.FoodTypeId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Permissions",
                 columns: table => new
@@ -40,23 +70,23 @@ namespace cafe.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PermissionRole",
+                name: "RolePermission",
                 columns: table => new
                 {
-                    PermissionsPermissionId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    PermissionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PermissionRole", x => new { x.PermissionsPermissionId, x.RoleId });
+                    table.PrimaryKey("pk_role_id_permission_id", x => new { x.RoleId, x.PermissionId });
                     table.ForeignKey(
-                        name: "FK_PermissionRole_Permissions_PermissionsPermissionId",
-                        column: x => x.PermissionsPermissionId,
+                        name: "FK_RolePermission_Permissions_PermissionId",
+                        column: x => x.PermissionId,
                         principalTable: "Permissions",
                         principalColumn: "PermissionId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PermissionRole_Roles_RoleId",
+                        name: "FK_RolePermission_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "RoleId",
@@ -86,23 +116,38 @@ namespace cafe.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Permissions",
+                columns: new[] { "PermissionId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "ViewFoodPermission" },
+                    { 2, "InsertFoodPermission" },
+                    { 3, "DeleteFoodPermission" },
+                    { 4, "ViewFoodPermission" },
+                    { 5, "InsertMenuPermission" },
+                    { 6, "DeleteMenuPermission" },
+                    { 7, "ViewMenuPermission" },
+                    { 8, "InsertUserPermission" },
+                    { 9, "DeleteUserPermission" },
+                    { 10, "ViewUserPermission" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "RoleId", "IsActive", "Name" },
                 values: new object[,]
                 {
-                    { 1, true, "super_admin" },
-                    { 2, true, "user" }
+                    { 1, true, "Admin" },
+                    { 2, true, "Manager" },
+                    { 3, true, "Chief" },
+                    { 4, true, "Waiter" },
+                    { 5, true, "Hr" }
                 });
 
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "UserId", "Email", "IsActive", "PasswordHash", "RoleId", "Username" },
-                values: new object[] { 1, "super_admin@yandex.ru", true, "C97E54106AFEFCBE18470AF99E80D55A13D72EED59F1B1AC805B1F8A3F51062A-B6EBDC4C24102084C25BE44A0DE06865", 1, "super_admin" });
-
             migrationBuilder.CreateIndex(
-                name: "IX_PermissionRole_RoleId",
-                table: "PermissionRole",
-                column: "RoleId");
+                name: "IX_RolePermission_PermissionId",
+                table: "RolePermission",
+                column: "PermissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
@@ -114,7 +159,13 @@ namespace cafe.Infrastructure.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PermissionRole");
+                name: "Foods");
+
+            migrationBuilder.DropTable(
+                name: "FoodTypes");
+
+            migrationBuilder.DropTable(
+                name: "RolePermission");
 
             migrationBuilder.DropTable(
                 name: "Users");

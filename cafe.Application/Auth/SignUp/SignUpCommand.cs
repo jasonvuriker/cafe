@@ -1,5 +1,5 @@
 ﻿using cafe.Domain.Entities;
-using cafe.Domain.Helper;
+using cafe.Domain.Services;
 using cafe.Infrastructure.DataAccess.Repositories.Interfaces;
 using MediatR;
 

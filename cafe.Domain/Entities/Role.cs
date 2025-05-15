@@ -4,7 +4,7 @@ public class Role
 {
     public Role()
     {
-        Permissions = new HashSet<Permission>();
+        RolePermissions = new HashSet<RolePermission>();
         Users = new HashSet<User>();
     }
 
@@ -14,7 +14,7 @@ public class Role
 
     public bool IsActive { get; set; }
 
-    public virtual ICollection<Permission> Permissions { get; set; }
+    public virtual ICollection<RolePermission> RolePermissions { get; set; }
 
     public virtual ICollection<User> Users { get; set; }
 }

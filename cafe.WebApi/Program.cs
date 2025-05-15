@@ -1,6 +1,9 @@
 using cafe.Application;
+using cafe.Domain.Enums;
 using cafe.Infrastructure.DataAccess;
+using cafe.WebApi.Auth;
 using cafe.WebApi.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,10 @@ builder.Services
     .AddDatabase(builder.Configuration)
     .AddApplication()
     .AddConfigurations(builder.Configuration);
+
+
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationProvider>();
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
 var app = builder.Build();
 

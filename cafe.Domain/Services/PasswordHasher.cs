@@ -1,7 +1,6 @@
 ﻿using System.Security.Cryptography;
-using System.Text;
 
-namespace cafe.Domain.Helper;
+namespace cafe.Domain.Services;
 
 public class PasswordHasher : IPasswordHasher
 {

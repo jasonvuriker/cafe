@@ -1,4 +1,4 @@
-﻿namespace cafe.Domain.Helper;
+﻿namespace cafe.Domain.Services;
 
 public interface IPasswordHasher
 {

@@ -1,5 +1,5 @@
 ﻿using cafe.Application.Services;
-using cafe.Domain.Helper;
+using cafe.Domain.Services;
 using cafe.Infrastructure.DataAccess.Repositories.Interfaces;
 using MediatR;
 
@@ -11,9 +11,9 @@ public class SignInCommand(SignInRequestDto request) : IRequest<SignInResponseDt
 }
 
 public class SignInCommandHandler(
-    IUserRepository userRepository, 
+    IUserRepository userRepository,
     IAuthService authService,
-    IPasswordHasher passwordHasher) 
+    IPasswordHasher passwordHasher)
     : IRequestHandler<SignInCommand, SignInResponseDto>
 {
     public async Task<SignInResponseDto> Handle(SignInCommand command, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ public class SignInCommandHandler(
             throw new UnauthorizedAccessException("Invalid username or password.");
         }
 
-        var token = authService.GetToken(request.Username);
+        var token = await authService.GetToken(user.UserId, request.Username);
 
         return new SignInResponseDto()
         {

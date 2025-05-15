@@ -2,5 +2,5 @@
 
 public interface IAuthService
 {
-    string GetToken(string username);
+    Task<string> GetToken(int userId, string username);
 }

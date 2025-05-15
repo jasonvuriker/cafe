@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using cafe.Application.Services;
-using cafe.Domain.Helper;
+using cafe.Domain.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace cafe.Application;
@@ -14,6 +14,7 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
 
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IPermissionService, PermissionService>();
 
         return services;
     }

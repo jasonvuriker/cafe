@@ -21,21 +21,6 @@ namespace cafe.Infrastructure.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("PermissionRole", b =>
-                {
-                    b.Property<int>("PermissionsPermissionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PermissionsPermissionId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("PermissionRole");
-                });
-
             modelBuilder.Entity("cafe.Domain.Entities.Food", b =>
                 {
                     b.Property<int>("FoodId")
@@ -98,6 +83,58 @@ namespace cafe.Infrastructure.DataAccess.Migrations
                     b.HasKey("PermissionId");
 
                     b.ToTable("Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            PermissionId = 1,
+                            Name = "ViewFoodPermission"
+                        },
+                        new
+                        {
+                            PermissionId = 2,
+                            Name = "InsertFoodPermission"
+                        },
+                        new
+                        {
+                            PermissionId = 3,
+                            Name = "DeleteFoodPermission"
+                        },
+                        new
+                        {
+                            PermissionId = 4,
+                            Name = "ViewFoodPermission"
+                        },
+                        new
+                        {
+                            PermissionId = 5,
+                            Name = "InsertMenuPermission"
+                        },
+                        new
+                        {
+                            PermissionId = 6,
+                            Name = "DeleteMenuPermission"
+                        },
+                        new
+                        {
+                            PermissionId = 7,
+                            Name = "ViewMenuPermission"
+                        },
+                        new
+                        {
+                            PermissionId = 8,
+                            Name = "InsertUserPermission"
+                        },
+                        new
+                        {
+                            PermissionId = 9,
+                            Name = "DeleteUserPermission"
+                        },
+                        new
+                        {
+                            PermissionId = 10,
+                            Name = "ViewUserPermission"
+                        });
                 });
 
             modelBuilder.Entity("cafe.Domain.Entities.Role", b =>
@@ -124,13 +161,99 @@ namespace cafe.Infrastructure.DataAccess.Migrations
                         {
                             RoleId = 1,
                             IsActive = true,
-                            Name = "super_admin"
+                            Name = "Admin"
                         },
                         new
                         {
                             RoleId = 2,
                             IsActive = true,
-                            Name = "user"
+                            Name = "Manager"
+                        },
+                        new
+                        {
+                            RoleId = 3,
+                            IsActive = true,
+                            Name = "Chief"
+                        },
+                        new
+                        {
+                            RoleId = 4,
+                            IsActive = true,
+                            Name = "Waiter"
+                        },
+                        new
+                        {
+                            RoleId = 5,
+                            IsActive = true,
+                            Name = "Hr"
+                        });
+                });
+
+            modelBuilder.Entity("cafe.Domain.Entities.RolePermission", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "PermissionId")
+                        .HasName("pk_role_id_permission_id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("RolePermission");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 1
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 2
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 3
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 4
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 5
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 6
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 7
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 8
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 9
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 10
                         });
                 });
 
@@ -167,19 +290,23 @@ namespace cafe.Infrastructure.DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PermissionRole", b =>
+            modelBuilder.Entity("cafe.Domain.Entities.RolePermission", b =>
                 {
-                    b.HasOne("cafe.Domain.Entities.Permission", null)
-                        .WithMany()
-                        .HasForeignKey("PermissionsPermissionId")
+                    b.HasOne("cafe.Domain.Entities.Permission", "Permission")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("cafe.Domain.Entities.Role", null)
-                        .WithMany()
+                    b.HasOne("cafe.Domain.Entities.Role", "Role")
+                        .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("cafe.Domain.Entities.User", b =>
@@ -191,8 +318,15 @@ namespace cafe.Infrastructure.DataAccess.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("cafe.Domain.Entities.Permission", b =>
+                {
+                    b.Navigation("RolePermissions");
+                });
+
             modelBuilder.Entity("cafe.Domain.Entities.Role", b =>
                 {
+                    b.Navigation("RolePermissions");
+
                     b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
