@@ -9,9 +9,6 @@ public class PermissionAuthorizationHandler() : AuthorizationHandler<PermissionA
         AuthorizationHandlerContext context,
         PermissionAuthorizationPolicyRequirement requirement)
     {
-        var userId = context.User.Claims
-            .FirstOrDefault(c => c.Type == "userId")?.Value;
-
         var permissions = context.User.Claims.Where(c => c.Type == AuthConstants.PermissionClaimType)
             .Select(c => c.Value)
             .ToList();

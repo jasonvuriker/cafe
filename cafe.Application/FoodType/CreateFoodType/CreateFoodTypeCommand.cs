@@ -1,24 +1,33 @@
-﻿using cafe.Application.FoodType.GetFoodType;
+﻿using System.Linq.Expressions;
+using cafe.Application.FoodType.GetFoodType;
 using cafe.Infrastructure.DataAccess.Repositories.Interfaces;
 using MediatR;
 
 namespace cafe.Application.FoodType.CreateFoodType;
 
-public class CreateFoodTypeCommand(string name) : IRequest
+public class CreateFoodTypeCommand(string name) : IRequest<FoodTypeDto>
 {
     public string Name { get; } = name;
 }
 
-public class CreateFoodTypeCommandHandler(IFoodTypeRepository foodTypeRepository, IMediator mediator) : IRequestHandler<CreateFoodTypeCommand>
+public class CreateFoodTypeCommandHandler(IFoodTypeRepository foodTypeRepository, IMediator mediator) : IRequestHandler<CreateFoodTypeCommand, FoodTypeDto>
 {
-    public async Task Handle(CreateFoodTypeCommand request, CancellationToken cancellationToken)
+    public async Task<FoodTypeDto> Handle(CreateFoodTypeCommand request, CancellationToken cancellationToken)
     {
-        await foodTypeRepository.AddAsync(new Domain.Entities.FoodType()
+        var entity = new Domain.Entities.FoodType()
         {
             Name = request.Name,
             IsActive = true,
-        });
+        };
+
+        await foodTypeRepository.AddAsync(entity);
 
         await foodTypeRepository.SaveChangesAsync();
+
+        return new FoodTypeDto()
+        {
+            FoodTypeId = entity.FoodTypeId,
+            Name = entity.Name,
+        };
     }
 }

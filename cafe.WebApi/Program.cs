@@ -3,6 +3,7 @@ using cafe.Domain.Enums;
 using cafe.Infrastructure.DataAccess;
 using cafe.WebApi.Auth;
 using cafe.WebApi.Extensions;
+using cafe.WebApi.Middlewares;
 using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
