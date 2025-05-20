@@ -32,6 +32,6 @@ public class CreateFoodTypeCommandTests
             .Verify((r)=> r.AddAsync(It.IsAny<Domain.Entities.FoodType>()), Times.Once);
 
         _mocker.GetMock<IFoodTypeRepository>()
-            .Verify((r) => r.SaveChangesAsync(), Times.Once);
+            .Verify((r) => r.SaveChangesAsync(), Times.Exactly(1));
     }
 }
