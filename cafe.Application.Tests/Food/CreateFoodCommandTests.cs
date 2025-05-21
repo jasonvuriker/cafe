@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AutoFixture;
+using AutoMapper;
 using cafe.Application.Food.CreateFood;
 using cafe.Infrastructure.DataAccess.Repositories.Interfaces;
 using Moq;
@@ -8,23 +9,17 @@ namespace cafe.Application.Tests.Food;
 public class CreateFoodCommandTests
 {
     private readonly AutoMocker _mocker = new();
+    private readonly Fixture _fixture = new();
 
     public CreateFoodCommandTests()
     {
-
     }
 
     [Fact]
     public async Task CreateFoodCommand_ValidInput_ShouldSuccess()
     {
         // Arrange
-        var request = new CreateFoodRequestDto()
-        {
-            FoodTypeId = 1,
-            Name = "Test Food",
-            IsActive = true,
-            Ingredients = ["Ingredient1", "Ingredient2"],
-        };
+        var request = _fixture.Create<CreateFoodRequestDto>();
 
         var command = new CreateFoodCommand(request);
 

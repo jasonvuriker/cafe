@@ -21,6 +21,8 @@ public static class DependencyInjection
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<CreateFoodTypeCommandValidator>();
 
+        services.AddAutoMapper(typeof(MappingProfile.MappingProfile).Assembly);
+
         return services;
     }
 
